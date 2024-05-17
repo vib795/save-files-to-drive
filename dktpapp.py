@@ -9,25 +9,16 @@ import webbrowser
 class PDFMoverUploaderApp:
     def __init__(self, master):
         self.master = master
-        master.title("PDF Mover and Uploader")
+        master.title("PDF Uploader")
 
         self.label = Label(master, text="PDF Mover and Uploader")
         self.label.pack()
 
-        self.source_button = Button(master, text="Select Source Directory", command=self.select_source_directory)
-        self.source_button.pack()
-
-        self.source_entry = Entry(master, width=50)
-        self.source_entry.pack()
-
-        self.destination_button = Button(master, text="Select Destination Directory", command=self.select_destination_directory)
+        self.destination_button = Button(master, text="Select fodler to upload files", command=self.select_destination_directory)
         self.destination_button.pack()
 
         self.destination_entry = Entry(master, width=50)
         self.destination_entry.pack()
-
-        self.move_button = Button(master, text="Move PDFs", command=self.move_pdfs)
-        self.move_button.pack()
 
         self.upload_button = Button(master, text="Upload to Google Drive", command=self.upload_to_drive)
         self.upload_button.pack()
@@ -35,36 +26,10 @@ class PDFMoverUploaderApp:
         self.source_directory = None
         self.destination_directory = None
 
-    def select_source_directory(self):
-        self.source_directory = filedialog.askdirectory()
-        self.source_entry.delete(0, 'end')
-        self.source_entry.insert(0, self.source_directory)
-
     def select_destination_directory(self):
         self.destination_directory = filedialog.askdirectory()
         self.destination_entry.delete(0, 'end')
         self.destination_entry.insert(0, self.destination_directory)
-
-    def move_pdfs(self):
-        if not self.source_directory or not self.destination_directory:
-            messagebox.showerror("Error", "Please select both source and destination directories")
-            return
-
-        print(f"Moving files from {self.source_directory} to {self.destination_directory}")
-        if not os.path.exists(self.destination_directory):
-            os.makedirs(self.destination_directory)
-            print(f"Created directory {self.destination_directory}")
-
-        for filename in os.listdir(self.source_directory):
-            if filename.endswith('.pdf'):
-                source_path = os.path.join(self.source_directory, filename)
-                dest_path = os.path.join(self.destination_directory, filename)
-                try:
-                    shutil.move(source_path, dest_path)
-                    print(f"Moved: {filename}")
-                except Exception as e:
-                    print(f"Error moving {filename}: {e}")
-        messagebox.showinfo("Success", "PDF files moved successfully!")
 
     def upload_to_drive(self):
         if not self.destination_directory:
